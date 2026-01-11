@@ -1,7 +1,15 @@
+using AspNetCoreVotaciones2026.Data;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<VotacionesDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
+
 
 var app = builder.Build();
 
