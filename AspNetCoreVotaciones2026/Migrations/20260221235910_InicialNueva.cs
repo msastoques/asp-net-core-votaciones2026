@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AspNetCoreVotaciones2026.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InicialNueva : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,32 @@ namespace AspNetCoreVotaciones2026.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Candidatos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sedes",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sedes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VotacionCerrada",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Cerrado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VotacionCerrada", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +75,8 @@ namespace AspNetCoreVotaciones2026.Migrations
                     VotoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CandidatoId = table.Column<int>(type: "int", nullable: false)
+                    CandidatoId = table.Column<int>(type: "int", nullable: false),
+                    SedeId = table.Column<string>(type: "nvarchar(128)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,17 +87,31 @@ namespace AspNetCoreVotaciones2026.Migrations
                         principalTable: "Candidatos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Votos_Sedes_SedeId",
+                        column: x => x.SedeId,
+                        principalTable: "Sedes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Votos_CandidatoId",
                 table: "Votos",
                 column: "CandidatoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votos_SedeId",
+                table: "Votos",
+                column: "SedeId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "VotacionCerrada");
+
             migrationBuilder.DropTable(
                 name: "Votantes");
 
@@ -79,6 +120,9 @@ namespace AspNetCoreVotaciones2026.Migrations
 
             migrationBuilder.DropTable(
                 name: "Candidatos");
+
+            migrationBuilder.DropTable(
+                name: "Sedes");
         }
     }
 }

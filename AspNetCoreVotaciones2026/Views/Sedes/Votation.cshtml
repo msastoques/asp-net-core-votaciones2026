@@ -1,0 +1,178 @@
+﻿@model List<Candidato>
+
+@{
+    ViewData["Title"] = "Votación";
+    var personeros = Model.Where(c => c.Id < 10).ToList();
+    var contralores = Model.Where(c => c.Id >90).ToList();
+}
+
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Mensaje
+    </div>
+}
+else{}
+
+<style>
+    .card-candidato {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border-radius: 15px;
+    }
+
+        .card-candidato:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+        input[type="radio"]:checked + label {
+            border: 3px solid #28a745;
+            transform: scale(1.2);
+        }
+
+    .img-candidato {
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* .card input[type="radio"]:checked + img {
+        border: 3px solid green;
+    } */
+</style>
+
+<div class="container">
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            @TempData["Error"]
+        </div>
+    }
+
+    <form method="post" asp-action="Votation" onsubmit="return validarSeleccion();">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="idSede" value="@ViewBag.IdSede" />
+
+        <!-- 🔹 PERSONERO -->
+        <h3 class="text-center mt-4">Personero</h3>
+        <div class="row justify-content-center">
+
+            @foreach (var c in personeros)
+            {
+                <div class="col-md-3">
+                    <div class="card p-3 text-center card-candidato">
+                        <input type="radio" name="Personero" value="@c.Id" id="p_@c.Id" />
+                        <label for="p_@c.Id">
+                            <img src="~/images/@(c.Id + ".png")" class="img-fluid img-candidato mb-2" />
+                            <h5>@c.Nombre</h5>
+                        </label>
+                    </div>
+                </div>
+            }
+
+            <!-- Voto en blanco -->
+            <div class="col-md-3">
+                <div class="card p-3 text-center card-candidato">
+                    <input type="radio" name="Personero" value="20" id="p_blanco" />
+                    <label for="p_blanco">
+                        <img src="~/images/0.png" class="img-fluid img-candidato mb-2" />
+                        <h5>Voto en Blanco</h5>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 🔹 CONTRALOR -->
+        <h3 class="text-center mt-5">Contralor</h3>
+        <div class="row justify-content-center">
+
+            @foreach (var c in contralores)
+            {
+                <div class="col-md-3">
+                    <div class="card p-3 text-center card-candidato">
+                        <input type="radio" name="Contralor" value="@c.Id" id="c_@c.Id" />
+                        <label for="c_@c.Id">
+                            <img src="~/images/@(c.Id + ".png")" class="img-fluid img-candidato mb-2" />
+                            <h5>@c.Nombre</h5>
+                        </label>
+                    </div>
+                </div>
+            }
+
+            <!-- Voto en blanco -->
+            <div class="col-md-3">
+                <div class="card p-3 text-center card-candidato">
+                    <input type="radio" name="Contralor" value="80" id="c_blanco" />
+                    <label for="c_blanco">
+                        <img src="~/images/0.png" class="img-fluid img-candidato mb-2" />
+                        <h5>Voto en Blanco</h5>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTÓN -->
+        <div class="text-center mt-5">
+            <button type="submit" class="btn btn-primary btn-lg px-5" id="btnVotar" disabled>
+                Votar
+            </button>
+        </div>
+
+    </form>
+
+</div>
+}
+
+<script>
+    function validarSeleccion() {
+        let p = document.querySelector('input[name="Personero"]:checked');
+        let c = document.querySelector('input[name="Contralor"]:checked');
+
+        if (!p || !c) {
+            alert("Debe seleccionar un candidato por cada corporación");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+<script>
+    const btn = document.getElementById("btnVotar");
+
+    // Todos los radios
+    const radios = document.querySelectorAll("input[type=radio]");
+
+    function validarSeleccion() {
+        const personero = document.querySelector("input[name='Personero']:checked");
+        const contralor = document.querySelector("input[name='Contralor']:checked");
+
+        if (personero && contralor) {
+            btn.disabled = false;
+        } else {
+            btn.disabled = true;
+        }
+    }
+
+    // Escuchar cambios en radios
+    radios.forEach(r => {
+        r.addEventListener("change", validarSeleccion);
+    });
+
+    // Evitar doble envío
+    document.querySelector("form").addEventListener("submit", function () {
+        btn.disabled = true;
+        btn.innerText = "Procesando...";
+    });
+
+    // 🔥 IMPORTANTE: validar al cargar (por si vuelve con datos)
+    window.addEventListener("load", validarSeleccion);
+</script>

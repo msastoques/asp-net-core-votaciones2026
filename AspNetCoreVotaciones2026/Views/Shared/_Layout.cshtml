@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Votaciones</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AspNetCoreVotaciones2026.styles.css" asp-append-version="true" />
+
+    <style>
+        .navbar-custom {
+            background-color: #F4D03F; /* Amarillo institucional */
+        }
+
+            .navbar-custom .navbar-brand,
+            .navbar-custom .nav-link {
+                color: #000 !important; /* Texto negro para contraste */
+            }
+
+                .navbar-custom .nav-link:hover {
+                    color: #333 !important;
+                }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom shadow-sm">
+
+        <div class="container">
+
+            <!-- Logo + Título -->
+            <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo.png"
+                     alt="Logo"
+                     width="40"
+                     height="40"
+                     class="me-2" />
+                <span class="fw-bold">
+                    Elección de Personero y Contralor 2026
+                </span>
+            </a>
+
+            <!-- Botón responsive -->
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menú -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto">
+
+                   @*  <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Home"
+                           asp-action="Index">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Candidatos"
+                           asp-action="Index">Candidatos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="VotacionCerradas"
+                           asp-action="Edit"
+                           asp-route-id="1">Estado Votación</a>
+                    </li> *@
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - Institución Educativa Eugenio Díaz Castro - @* <a asp-area="" asp-page="/Privacy">Privacy</a> *@
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

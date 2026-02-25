@@ -13,5 +13,7 @@ namespace AspNetCoreVotaciones2026.Data
         public DbSet<Votante> Votantes { get; set; }
         public DbSet<Candidato> Candidatos { get; set; }
         public DbSet<Voto> Votos { get; set; }
+        public DbSet<Sede> Sedes { get; set; }
+        public DbSet<VotacionCerrada> VotacionCerrada { get; set; }
     }
 }

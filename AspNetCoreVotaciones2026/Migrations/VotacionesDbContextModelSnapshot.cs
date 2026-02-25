@@ -52,6 +52,43 @@ namespace AspNetCoreVotaciones2026.Migrations
                     b.ToTable("Candidatos");
                 });
 
+            modelBuilder.Entity("AspNetCoreVotaciones2026.Models.Sede", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sedes");
+                });
+
+            modelBuilder.Entity("AspNetCoreVotaciones2026.Models.VotacionCerrada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Cerrado")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VotacionCerrada");
+                });
+
             modelBuilder.Entity("AspNetCoreVotaciones2026.Models.Votante", b =>
                 {
                     b.Property<int>("Id")
@@ -91,9 +128,15 @@ namespace AspNetCoreVotaciones2026.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SedeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)");
+
                     b.HasKey("VotoId");
 
                     b.HasIndex("CandidatoId");
+
+                    b.HasIndex("SedeId");
 
                     b.ToTable("Votos");
                 });
@@ -106,7 +149,20 @@ namespace AspNetCoreVotaciones2026.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AspNetCoreVotaciones2026.Models.Sede", "Sede")
+                        .WithMany("Votos")
+                        .HasForeignKey("SedeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Candidato");
+
+                    b.Navigation("Sede");
+                });
+
+            modelBuilder.Entity("AspNetCoreVotaciones2026.Models.Sede", b =>
+                {
+                    b.Navigation("Votos");
                 });
 #pragma warning restore 612, 618
         }

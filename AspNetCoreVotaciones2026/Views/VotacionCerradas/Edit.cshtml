@@ -1,0 +1,39 @@
+﻿@model AspNetCoreVotaciones2026.Models.VotacionCerrada;
+
+@{
+    ViewData["Title"] = "Estado";
+}
+
+<h2>Estado de la Votación</h2>
+
+@if (Model.Cerrado)
+{
+    <div class="alert alert-danger">
+        🔒 La votación está CERRADA
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        🟢 La votación está ABIERTA
+    </div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="id" value="1" />
+    @Html.AntiForgeryToken()
+
+    @if (Model.Cerrado)
+    {
+        <button type="submit" class="btn btn-success">
+            Abrir Votación
+        </button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-danger">
+            Cerrar Votación
+        </button>
+    }
+</form>
+

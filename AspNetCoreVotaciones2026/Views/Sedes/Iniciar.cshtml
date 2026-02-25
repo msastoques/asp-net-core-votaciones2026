@@ -1,0 +1,43 @@
+﻿@model AspNetCoreVotaciones2026.Models.IniciarVotacionViewModel;
+
+@{
+    ViewData["Title"] = "Iniciar Votación";
+}
+
+<h2>Iniciar Votación</h2>
+
+<form asp-action="Iniciar" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <!-- Mostrar errores -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- ID oculto -->
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Nombre" />
+
+    <!-- Nombre como label -->
+    <div>
+        <label><strong>Sede:</strong> @Model.Nombre</label>
+    </div>
+
+    <!-- Código -->
+    <div>
+        <label asp-for="Codigo" class="control-label"></label>
+        <input asp-for="Codigo" class="form-control" />
+        <span asp-validation-for="Codigo" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">
+        Ingresar
+    </button>
+
+</form>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

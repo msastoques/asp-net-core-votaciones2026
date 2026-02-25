@@ -12,11 +12,12 @@ namespace AspNetCoreVotaciones2026.Models
         [Required]
         public DateTime Fecha { get; set; } = DateTime.Now;
 
-        // Clave foránea
-        [ForeignKey("Candidato")]
+        // FK Candidato
         public int CandidatoId { get; set; }
-
-        // Navegación
         public Candidato Candidato { get; set; }
+
+        // FK Sede
+        public string SedeId { get; set; }
+        public Sede Sede { get; set; }
     }
 }
